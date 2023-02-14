@@ -2,7 +2,7 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: github.com/froedevrolijk/grpc-invoicing/gen
+    default: github.com/froedevrolijk/grpc-invoicing/gen/proto/go
 plugins:
   - remote: buf.build/protocolbuffers/plugins/go:v1.28.0-1
     out: gen

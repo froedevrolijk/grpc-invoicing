@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package pricing.v1;
+
+service PricingService {
+    rpc ListPricing(Empty) returns (stream ListPricingResponse) {}
+    rpc GetPricing(PricingRequest) returns (Pricing) {}
+    rpc CreatePricing (Pricing) returns (Pricing) {}
+    rpc UpdatePricing (Pricing) returns (Pricing) {}
+    rpc DeletePricing (PricingRequest) returns (Empty) {}
+}
+
+message Empty {}
+
+message ListPricingResponse {
+    Pricing pricing = 1;
+}
+
+message Pricing {
+    string code = 1;
+    string name = 2;
+    string country = 3;
+}
+
+message PricingRequest {
+    string code = 1;
+}
+
+// 
+// 
