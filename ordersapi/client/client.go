@@ -4,20 +4,20 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"net"
 	"time"
 
-	"github.com/froedevrolijk/grpc-invoicing/common"
-	ordersv1 "github.com/froedevrolijk/grpc-invoicing/gen/orders/v1"
+	ordersv1 "github.com/froedevrolijk/grpc-invoicing/proto/orders/v1"
+	"github.com/froedevrolijk/grpc-invoicing/util"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 var (
-	addr = flag.String("addr", "localhost", "The address of the server to connect to")
-	port = flag.String("port", "8080", "The port to connect to")
+	addr = flag.String("addr", "0.0.0.0", "The address of the server to connect to")
+	port = flag.String("port", "10000", "The port to connect to")
 )
 
 func main() {
@@ -26,15 +26,11 @@ func main() {
 
 	conn, err := grpc.DialContext(ctx, net.JoinHostPort(*addr, *port),
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
-
 	if err != nil {
 		log.Fatal("Failed to connect to server: ", err)
 	}
 
 	client := ordersv1.NewOrdersServiceClient(conn)
-
-	fmt.Println("listOrders")
-	listOrders(client, &ordersv1.Empty{})
 
 	createOrderRequest := &ordersv1.CreateOrderRequest{
 		Order: &ordersv1.Order{
@@ -42,23 +38,20 @@ func main() {
 		},
 	}
 
-	fmt.Println("createOrder")
+	fmt.Print("createOrder: ")
 	createOrder(client, createOrderRequest)
+
+	fmt.Print("listOrders: ")
+	listOrders(client, &emptypb.Empty{})
+
 }
 
-func listOrders(client ordersv1.OrdersServiceClient, empty *ordersv1.Empty) {
+func listOrders(client ordersv1.OrdersServiceClient, empty *emptypb.Empty) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	stream, err := client.ListOrders(ctx, empty)
-	common.HandleError(err)
-	for {
-		order, err := stream.Recv()
-		if err == io.EOF {
-			break
-		}
-		common.HandleError(err)
-		log.Printf("Order: id: %v, amount: %v", order.Order.Id, order.Order.Amount)
-	}
+	listedOrders, err := client.ListOrders(ctx, empty)
+	util.HandleError(err)
+	log.Println(listedOrders)
 }
 
 func createOrder(client ordersv1.OrdersServiceClient, req *ordersv1.CreateOrderRequest) {
@@ -66,6 +59,6 @@ func createOrder(client ordersv1.OrdersServiceClient, req *ordersv1.CreateOrderR
 	defer cancel()
 
 	createdOrder, err := client.CreateOrder(ctx, req)
-	common.HandleError(err)
+	util.HandleError(err)
 	log.Println(createdOrder)
 }
