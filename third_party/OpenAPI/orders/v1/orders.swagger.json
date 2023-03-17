@@ -59,7 +59,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1Order"
+              "$ref": "#/definitions/ordersv1Order"
             }
           }
         ],
@@ -70,6 +70,53 @@
     }
   },
   "definitions": {
+    "ordersv1Country": {
+      "type": "string",
+      "enum": [
+        "NL",
+        "DE",
+        "BE"
+      ],
+      "default": "NL"
+    },
+    "ordersv1Order": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "country": {
+          "$ref": "#/definitions/ordersv1Country"
+        },
+        "orderType": {
+          "$ref": "#/definitions/ordersv1OrderType"
+        },
+        "packetSize": {
+          "$ref": "#/definitions/ordersv1PacketSize"
+        }
+      }
+    },
+    "ordersv1OrderType": {
+      "type": "string",
+      "enum": [
+        "CLAIM",
+        "SHIPMENT"
+      ],
+      "default": "CLAIM"
+    },
+    "ordersv1PacketSize": {
+      "type": "string",
+      "enum": [
+        "SMALL",
+        "MEDIUM",
+        "LARGE"
+      ],
+      "default": "SMALL"
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -101,7 +148,7 @@
       "type": "object",
       "properties": {
         "order": {
-          "$ref": "#/definitions/v1Order"
+          "$ref": "#/definitions/ordersv1Order"
         }
       }
     },
@@ -111,20 +158,8 @@
         "orders": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1Order"
+            "$ref": "#/definitions/ordersv1Order"
           }
-        }
-      }
-    },
-    "v1Order": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "amount": {
-          "type": "integer",
-          "format": "int32"
         }
       }
     }

@@ -1,0 +1,130 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pricing/v1/pricing.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "PricingService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "pricingv1Country": {
+      "type": "string",
+      "enum": [
+        "NL",
+        "DE",
+        "BE"
+      ],
+      "default": "NL"
+    },
+    "pricingv1Order": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "country": {
+          "$ref": "#/definitions/pricingv1Country"
+        },
+        "orderType": {
+          "$ref": "#/definitions/pricingv1OrderType"
+        },
+        "packetSize": {
+          "$ref": "#/definitions/pricingv1PacketSize"
+        }
+      }
+    },
+    "pricingv1OrderType": {
+      "type": "string",
+      "enum": [
+        "CLAIM",
+        "SHIPMENT"
+      ],
+      "default": "CLAIM"
+    },
+    "pricingv1PacketSize": {
+      "type": "string",
+      "enum": [
+        "SMALL",
+        "MEDIUM",
+        "LARGE"
+      ],
+      "default": "SMALL"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1GetPricingResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "format": "int64"
+        },
+        "error": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/v1PricingData"
+        }
+      }
+    },
+    "v1PricingData": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "rate": {
+          "type": "number",
+          "format": "float"
+        },
+        "charge": {
+          "type": "boolean"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    }
+  }
+}

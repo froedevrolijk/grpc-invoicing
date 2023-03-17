@@ -21,6 +21,26 @@ service OrdersService {
 message Order {
   string id = 1;
   int32 amount = 2;
+  Country country = 3;
+  OrderType order_type = 4;
+  PacketSize packet_size = 5;
+}
+
+enum Country {
+  NL = 0;
+  DE = 1;
+  BE = 2;
+}
+
+enum OrderType {
+  CLAIM = 0;
+  SHIPMENT = 1;
+}
+
+enum PacketSize {
+  SMALL = 0;
+  MEDIUM = 1;
+  LARGE = 2;
 }
 
 message ListOrdersResponse {

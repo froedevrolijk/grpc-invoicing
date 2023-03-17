@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  order-db:
+    image: postgres:11-alpine
+    container_name: order-db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=$order-db
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+  pricing-db:
+    image: postgres:11-alpine
+    container_name: pricing-db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=pricing-db
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./data:/var/lib/postgresql/data

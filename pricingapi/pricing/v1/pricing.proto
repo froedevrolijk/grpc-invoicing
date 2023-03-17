@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package pricing.v1;
+
+service PricingService {
+    rpc GetPricing (GetPricingRequest) returns (GetPricingResponse) {}
+
+}
+
+message GetPricingRequest {
+    Order order = 1;
+}
+
+message GetPricingResponse {
+    int64 status = 1;
+    string error = 2;
+    PricingData data = 3;
+}
+
+message Order {
+    string id = 1;
+    int32 amount = 2;
+    Country country = 3;
+    OrderType order_type = 4;
+    PacketSize packet_size = 5;
+  }
+
+enum Country {
+  NL = 0;
+  DE = 1;
+  BE = 3;
+}
+  
+enum OrderType {
+  CLAIM = 0;
+  SHIPMENT = 1;
+}
+
+enum PacketSize {
+    SMALL = 0;
+    MEDIUM = 1;
+    LARGE = 2;
+}
+
+message PricingData {
+    int64 id = 1;
+    float rate = 2;
+    bool charge = 3;
+    float amount = 4; 
+}
